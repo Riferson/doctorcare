@@ -1,19 +1,62 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { App } from "./App";
+import { createServer, Model } from "miragejs";
+
+createServer({
+  models: {
+    consulta: Model,
+  },
+
+  seeds(server) {
+    server.db.loadData({
+      consulta: [
+        {
+          id: 1,
+          nome: "josefina",
+          email: "josefina@123.com",
+          telefone: "62912348765",
+          especialidade: "geral",
+          data: "12/05/2022",
+        },
+        {
+          id: 2,
+          nome: "josefina",
+          email: "josefina@123.com",
+          telefone: "62912348765",
+          especialidade: "geral",
+          data: "12/05/2022",
+        },
+        {
+          id: 3,
+          nome: "josefina",
+          email: "josefina@123.com",
+          telefone: "62912348765",
+          especialidade: "geral",
+          data: "12/05/2022",
+        },
+      ],
+    });
+  },
+
+  routes() {
+    this.namespace = "api";
+    this.get("/consultas", () => {
+      return this.schema.all("consulta");
+    });
+
+    this.post("/consultas", (schema, request) => {
+      const data = JSON.parse(request.requestBody);
+      return schema.create("consulta", data);
+    });
+  },
+});
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

@@ -1,26 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { GlobalStyle } from "./styles/global"
+import Modal from 'react-modal';
+import { Home } from "./screens/Home";
+import { AreaDoPaciente } from "./screens/AreaDoPaciente";
+import { useState } from "react";
+import { NewConsultModal } from "./components/NewConsultModal";
+import {BrowserRouter,Routes,Route} from 'react-router-dom';
+import dayjs from "dayjs";
+import { ConsultasProvider } from "./ConsultasContext";
 
-function App() {
+Modal.setAppElement('#root');
+
+export function App() {
+  const [isNewConsultModalOpen,setIsNewConsultModalOpen] = useState(false);
+
+  function handleOpenNewConsultModal(){
+      setIsNewConsultModalOpen(true);
+  }
+  function handleCloseNewConsultModal(){
+      setIsNewConsultModalOpen(false);
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ConsultasProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home/>}/>
+            <Route path="/AreaDoPaciente" element={<AreaDoPaciente onOpenNewConsultModal={handleOpenNewConsultModal}/>}/>
+          </Routes>
+        </BrowserRouter>
+
+        <GlobalStyle/>
+        <NewConsultModal isOpen={isNewConsultModalOpen} onRequestClose={handleCloseNewConsultModal}/>
+    </ConsultasProvider>
   );
 }
-
-export default App;
